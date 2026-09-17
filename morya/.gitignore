@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+# private source photographs never leave this machine via git
+input/
+# derived from input/ by `npm run images`; regenerated locally, never committed
+public/memories/
+*.tsbuildinfo
+.vercel
