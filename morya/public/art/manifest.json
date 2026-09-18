@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "ganesh-line": "ganesh-line.png",
+    "ganesh-color": "ganesh-color.png",
+    "woman": "woman.png",
+    "surroundings": "surroundings.webp",
+    "foreground": "foreground.png",
+    "ornament-halo": "ornament-halo.png",
+    "ornament-crown": "ornament-crown.png",
+    "ornament-tilak": "ornament-tilak.png",
+    "ornament-jewels": "ornament-jewels.png",
+    "ornament-seat": "ornament-seat.png",
+    "ornament-bell": "ornament-bell.png"
+  }
+}

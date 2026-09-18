@@ -1,0 +1,28 @@
+{
+  "name": "morya",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "images": "node scripts/optimize-images.mjs",
+    "icons": "node scripts/generate-icons.mjs",
+    "predev": "node scripts/optimize-images.mjs",
+    "dev": "vite --host",
+    "prebuild": "npm run images && npm run icons",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "sharp": "^0.35.4",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  }
+}
