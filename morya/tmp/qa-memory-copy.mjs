@@ -1,0 +1,17 @@
+import { writeFile } from 'node:fs/promises';
+const pages=await fetch('http://127.0.0.1:9444/json').then(r=>r.json());
+const page=pages.find(p=>p.type==='page'&&p.url.includes('127.0.0.1:5173'));
+const ws=new WebSocket(page.webSocketDebuggerUrl); await new Promise((ok,no)=>{ws.onopen=ok;ws.onerror=no});
+let id=0;const pending=new Map();ws.onmessage=({data})=>{const m=JSON.parse(data),p=pending.get(m.id);if(!p)return;pending.delete(m.id);m.error?p.no(m.error):p.ok(m.result)};
+const send=(method,params={})=>new Promise((ok,no)=>{const n=++id;pending.set(n,{ok,no});ws.send(JSON.stringify({id:n,method,params}))});
+const ev=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.text);return r.result.value};
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const shot=async name=>{const s=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});await writeFile(`tmp/text-audit/${name}.png`,Buffer.from(s.data,'base64'))};
+await send('Page.enable');await send('Runtime.enable');await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,screenWidth:390,screenHeight:844,deviceScaleFactor:1,mobile:true});
+await send('Page.navigate',{url:'http://127.0.0.1:5173/?memory-copy'});
+for(let n=0;n<100&&!await ev(`Boolean(window.__morya?.ui.ready)`);n++)await wait(100);
+await ev(`(()=>{document.querySelector('.threshold')?.remove();const e=window.__morya;e.beginLiving();e.camTo='living';e.camDur=0;e.sketch.fill();e.color.fill();e.back.fill();e.front.fill();e.woman.fill();e.values.set('living',1);e.openMemoryById('diya')})()`);
+for(let n=0;n<100&&!await ev(`Boolean(window.__morya.ui.memory)`);n++)await wait(100);
+await wait(180);const early=await ev(`({status:getComputedStyle(document.querySelector('.memory-status')).opacity,actions:getComputedStyle(document.querySelector('.memory-actions')).opacity,back:getComputedStyle(document.querySelector('.memory-back')).fontSize,year:getComputedStyle(document.querySelector('.memory-year-label')).fontSize,count:getComputedStyle(document.querySelector('.memory-count')).fontSize,swipe:getComputedStyle(document.querySelector('.memory-swipe-hint')).fontSize})`);await shot('390x844-memory-opening');
+await wait(1300);const settled=await ev(`({status:getComputedStyle(document.querySelector('.memory-status')).opacity,actions:getComputedStyle(document.querySelector('.memory-actions')).opacity})`);await shot('390x844-memory-copy-settled');
+console.log(JSON.stringify({early,settled},null,2));ws.close();

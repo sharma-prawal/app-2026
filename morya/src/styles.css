@@ -1,0 +1,1088 @@
+:root {
+  --paper: #f3e9d6;
+  --ink: #4a2e1f;
+  --ink-soft: #6b4a36;
+  --sindoor: #c8452d;
+  --gold: #b8904f;
+  --serif: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --ease-soft: cubic-bezier(0.37, 0, 0.18, 1);
+  color-scheme: light;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  height: 100dvh;
+}
+
+.stage {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 100svh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.safe-probe {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible {
+  outline: 1.5px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+/* ───── Threshold ───── */
+
+.threshold {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(44px, 10vh, 96px);
+  padding: calc(env(safe-area-inset-top) + 24px) 24px calc(env(safe-area-inset-bottom) + 24px);
+  text-align: center;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: opacity 1.4s var(--ease-soft) 0.5s;
+}
+
+.threshold.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.threshold-words {
+  transition: opacity 1.2s var(--ease-soft), transform 1.6s var(--ease-soft);
+  margin-top: -6vh;
+}
+
+.threshold.is-lit .threshold-words {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.threshold-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(25px, 7vw, 36px);
+  line-height: 1.15;
+  letter-spacing: 0.035em;
+  color: var(--ink);
+  opacity: 0.86;
+}
+
+.threshold-line {
+  margin: 16px 0 0;
+  font-style: italic;
+  font-size: clamp(15px, 4.1vw, 18px);
+  color: var(--ink-soft);
+  opacity: 0.78;
+}
+
+.threshold-line::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--sindoor);
+  opacity: 0.55;
+}
+
+.diya {
+  position: relative;
+  width: min(40vw, 160px);
+  aspect-ratio: 220 / 170;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.diya svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.diya-glow {
+  position: absolute;
+  left: 88.6%;
+  top: 30%;
+  width: 360%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 206, 128, 0.42), rgba(255, 206, 128, 0.12) 45%, rgba(255, 206, 128, 0) 100%);
+  opacity: 0;
+  scale: 0.4;
+  transition: opacity 2.2s var(--ease-soft), scale 2.4s var(--ease-soft);
+  pointer-events: none;
+}
+
+.diya-flame {
+  transform-origin: 195px 61px;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.9s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.25s linear;
+}
+
+.diya-ember {
+  opacity: 0.35;
+}
+
+.diya.is-nudging .diya-ember {
+  animation: ember 3.2s ease-in-out infinite;
+}
+
+.threshold.is-lit .diya-ember {
+  animation: none;
+  opacity: 0;
+}
+
+.threshold.is-lit .diya-flame {
+  transform: scale(1);
+  opacity: 1;
+  animation: flicker 2.6s ease-in-out 0.9s infinite;
+}
+
+.threshold.is-lit .diya-glow {
+  opacity: 1;
+  scale: 1;
+}
+
+@keyframes ember {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes flicker {
+  0%, 100% { transform: scale(1) skewX(0deg); }
+  22% { transform: scale(1.03, 0.97) skewX(-2deg); }
+  47% { transform: scale(0.98, 1.04) skewX(1.5deg); }
+  71% { transform: scale(1.02, 0.99) skewX(-1deg); }
+}
+
+/* ───── Words over the painting ───── */
+
+.whisper,
+.stroke-prompt,
+.letter-prompt,
+.final-blessing,
+.final p {
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.whisper {
+  position: absolute;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  width: min(86vw, 34ch);
+  translate: -50% 0;
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+  opacity: 0;
+  transition: opacity 1.6s var(--ease-soft);
+}
+
+.whisper.is-on {
+  opacity: 0.7;
+}
+
+.stroke-prompt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(env(safe-area-inset-top) + 22px);
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  font-size: clamp(18px, 4.8vw, 21px);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 1.8s var(--ease-soft);
+}
+
+.stroke-prompt.is-on {
+  opacity: 0.78;
+}
+
+.final {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.final p {
+  margin: 0;
+  opacity: 0;
+  transition: opacity 3s var(--ease-soft);
+}
+
+.final-line {
+  font-style: italic;
+  font-size: clamp(15px, 4vw, 17px);
+  color: var(--ink-soft);
+}
+
+.final-memory {
+  margin-top: 4px !important;
+  font-style: italic;
+  font-size: clamp(14px, 3.8vw, 16px);
+  letter-spacing: 0.012em;
+  color: var(--ink-soft);
+}
+
+.final.is-on p.is-on {
+  opacity: 0.8;
+}
+
+.letter-prompt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  opacity: 0;
+  transition: opacity 2.2s var(--ease-soft);
+}
+
+.letter-prompt.is-on {
+  opacity: 0.68;
+}
+
+/*
+ * The ending copy is written on the bare paper under the painting: from the line where the art has
+ * softened away (--paper-top, published by the engine from the painting's own framing) down to just
+ * above the home-indicator inset. Every ending line shares this one band, centred in it.
+ */
+.ending-copy-zone {
+  position: absolute;
+  z-index: 8;
+  top: var(--paper-top, calc(100% - env(safe-area-inset-bottom) - 96px));
+  right: max(20px, env(safe-area-inset-right));
+  bottom: calc(env(safe-area-inset-bottom) + 6px);
+  left: max(20px, env(safe-area-inset-left));
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.ending-copy-zone > * {
+  grid-area: 1 / 1;
+}
+
+.final-blessing {
+  width: min(100%, 34rem);
+  margin: 0;
+  text-align: center;
+  font-size: clamp(18px, 5vw, 21px);
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+/* each line carries its own opacity: a faded parent must not thin the line inside it */
+.final-blessing p {
+  margin: 0;
+  opacity: 0;
+  transition: opacity 2.6s var(--ease-soft);
+}
+
+.final-blessing.is-on p:first-child {
+  opacity: 0.88;
+}
+
+.final-blessing .final-farewell {
+  margin-top: 5px;
+  font-size: clamp(15px, 4.1vw, 18px);
+  font-style: italic;
+  letter-spacing: 0.025em;
+  transition-duration: 2.2s;
+}
+
+.final-blessing .final-farewell.is-on {
+  opacity: 0.9;
+}
+
+.epilogue-offer {
+  position: relative;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-style: italic;
+  font-size: clamp(15px, 4vw, 17px);
+  letter-spacing: 0.025em;
+  opacity: 0.82;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: arrive 2.2s var(--ease-soft) both;
+}
+
+.epilogue-offer::after {
+  content: '';
+  position: absolute;
+  right: 15px;
+  bottom: 8px;
+  left: 15px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(120, 78, 45, 0.55), transparent);
+}
+
+.epilogue-offer:hover,
+.epilogue-offer:focus-visible {
+  opacity: 1;
+}
+
+/* ───── The note: a folded patra by the offerings ───── */
+
+.folded-note {
+  position: absolute;
+  /* a generous touch area around a small physical object */
+  width: 52px;
+  height: 62px;
+  translate: -50% -50%;
+  rotate: -6deg;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: note-arrive 2.6s var(--ease-soft) both;
+}
+
+.folded-note svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 44px;
+  translate: -50% -50%;
+  overflow: visible;
+}
+
+/* once, as it is placed: light catches its gold rule */
+.folded-note::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40px;
+  height: 52px;
+  translate: -50% -50%;
+  border-radius: 40%;
+  background: radial-gradient(closest-side, rgba(255, 228, 170, 0.55), rgba(255, 228, 170, 0));
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  animation: note-glint 3.2s 1.2s var(--ease-soft) both;
+  pointer-events: none;
+}
+
+@keyframes note-arrive {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes note-glint {
+  0% { opacity: 0; }
+  35% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.letter-wash {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: calc(env(safe-area-inset-top) + 24px) 16px calc(env(safe-area-inset-bottom) + 24px);
+  background: radial-gradient(circle at 50% 45%, rgba(238, 225, 200, 0.7), rgba(222, 204, 172, 0.62) 70%, rgba(214, 194, 160, 0.6));
+  animation: letter-wash-in 1.4s var(--ease-soft) both;
+}
+
+.letter-wash.is-folding {
+  animation: letter-wash-out 0.95s var(--ease-soft) both;
+}
+
+.letter-paper {
+  position: relative;
+  width: min(80vw, 330px);
+  /* a narrow, upright sheet: about 3 : 4.2 */
+  min-height: min(calc(min(80vw, 330px) * 1.4), 80vh);
+  display: flex;
+  align-items: center;
+  padding: clamp(46px, 13vw, 58px) clamp(30px, 9vw, 40px) clamp(40px, 11vw, 52px);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  font-size: clamp(15.5px, 4.2vw, 18px);
+  line-height: 1.42;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: 50% 0;
+  animation: patra-unfold 1.5s var(--ease-soft) both;
+}
+
+.letter-wash.is-folding .letter-paper {
+  animation: patra-fold 0.95s var(--ease-soft) both;
+}
+
+.patra-sheet {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.letter-words {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.9vh, 16px);
+  animation: letter-words-in 1.2s 0.75s var(--ease-soft) both;
+}
+
+.letter-words span {
+  display: block;
+}
+
+.letter-salutation {
+  font-style: italic;
+  font-size: 1.1em;
+}
+
+.letter-signoff {
+  margin-top: 4px;
+  letter-spacing: 0.045em;
+  color: #70462e;
+}
+
+@keyframes letter-wash-in {
+  from { opacity: 0; }
+}
+
+@keyframes letter-wash-out {
+  to { opacity: 0; }
+}
+
+/* it opens from the top fold downward, as a folded sheet does */
+@keyframes patra-unfold {
+  0% { opacity: 0; transform: perspective(900px) rotateX(-64deg) scaleY(0.36); }
+  30% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes patra-fold {
+  0% { transform: none; opacity: 1; }
+  100% { transform: perspective(900px) rotateX(-60deg) scaleY(0.34) translateY(40px); opacity: 0; }
+}
+
+@keyframes letter-words-in {
+  from { opacity: 0; }
+}
+
+/* ───── Understated controls ───── */
+
+.sound {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 6px);
+  right: calc(env(safe-area-inset-right) + 6px);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 0.24;
+  cursor: pointer;
+  transition: opacity 1.2s;
+  animation: arrive 2.4s var(--ease-soft) both;
+}
+
+.immersive {
+  position: absolute;
+  z-index: 9;
+  top: calc(env(safe-area-inset-top) + 6px);
+  right: calc(env(safe-area-inset-right) + 52px);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 0.24;
+  cursor: pointer;
+  transition: opacity 1.2s;
+  animation: arrive 2.4s var(--ease-soft) both;
+}
+
+.immersive.is-quiet {
+  opacity: 0.1;
+}
+
+.immersive:hover,
+.immersive:focus-visible {
+  opacity: 0.8;
+}
+
+.immersive svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.immersive-hint {
+  position: absolute;
+  z-index: 12;
+  top: calc(env(safe-area-inset-top) + 52px);
+  right: calc(env(safe-area-inset-right) + 12px);
+  width: min(68vw, 240px);
+  padding: 13px 44px 13px 16px;
+  border: 1px solid rgba(120, 84, 51, 0.18);
+  border-radius: 2px 3px 2px 4px;
+  background: rgba(243, 233, 214, 0.96);
+  box-shadow: 0 2px 14px rgba(74, 46, 31, 0.08), 0 1px 3px rgba(74, 46, 31, 0.05);
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: 13.5px;
+  line-height: 1.35;
+  animation: arrive 0.7s var(--ease-soft) both;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.immersive-hint-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.immersive-hint-title {
+  font-style: italic;
+  letter-spacing: 0.015em;
+  color: var(--ink-soft);
+}
+
+.immersive-hint-step {
+  font-style: normal;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  opacity: 0.88;
+}
+
+.immersive-hint button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.52;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.immersive-hint button:hover,
+.immersive-hint button:focus-visible {
+  opacity: 0.9;
+}
+
+/* ───── The optional film: still part of the paper world ───── */
+
+.epilogue-layer {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 100svh;
+  height: 100dvh;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: var(--paper);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.epilogue-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 48% 36%, rgba(255, 250, 235, 0.36), transparent 56%),
+    var(--paper);
+  opacity: 1;
+  transition: opacity 0.42s var(--ease-soft) 0.42s;
+}
+
+.epilogue-layer.is-playing,
+.epilogue-layer.is-leaving {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.epilogue-layer.is-leaving {
+  background: transparent;
+}
+
+.epilogue-layer.is-leaving::before {
+  opacity: 0;
+}
+
+.epilogue-video {
+  position: relative;
+  z-index: 1;
+  width: min(100%, calc((100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 9 / 16));
+  width: min(100%, calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 9 / 16));
+  height: min(100%, calc((100vw - env(safe-area-inset-left) - env(safe-area-inset-right)) * 16 / 9));
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background: var(--paper);
+  opacity: 0;
+}
+
+.epilogue-layer.is-playing .epilogue-video {
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.epilogue-layer.is-leaving .epilogue-video {
+  opacity: 0;
+  transition: opacity 0.68s var(--ease-soft);
+}
+
+.epilogue-controls {
+  position: absolute;
+  z-index: 2;
+  top: calc(env(safe-area-inset-top) + 5px);
+  right: calc(env(safe-area-inset-right) + 5px);
+  left: calc(env(safe-area-inset-left) + 5px);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.epilogue-controls button {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  color: rgba(74, 46, 31, 0.74);
+  font-size: 18px;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgba(255, 248, 229, 0.88);
+  opacity: 0.62;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.epilogue-controls button:last-child {
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0.025em;
+}
+
+.sound.is-quiet {
+  opacity: 0.1;
+}
+
+.sound:hover,
+.sound:focus-visible {
+  opacity: 0.8;
+}
+
+.sound svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.replay {
+  position: absolute;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 8px);
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  background: none;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  opacity: 0.4;
+  cursor: pointer;
+  animation: arrive 3s var(--ease-soft) both;
+}
+
+/* it shares the ending band: let the blessing lines finish fading (2.6s) before it begins to arrive */
+.replay.after-blessing {
+  animation-delay: 2.2s;
+}
+
+.replay:hover,
+.replay:focus-visible {
+  opacity: 0.8;
+}
+
+@keyframes arrive {
+  from { opacity: 0; }
+}
+
+.memory-keys {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.memory-key {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.memory-key:focus-visible {
+  outline: 1.5px dashed var(--gold);
+  outline-offset: 0;
+}
+
+.memory-guide {
+  position: absolute;
+  z-index: 7;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: calc(max(1.2rem, env(safe-area-inset-bottom)) + 0.25rem);
+  left: max(1.25rem, env(safe-area-inset-left));
+  margin: 0;
+  color: rgba(78, 48, 29, 0.7);
+  font-family: var(--serif);
+  font-size: clamp(0.8rem, 3.2vw, 0.96rem);
+  font-style: italic;
+  letter-spacing: 0.045em;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.78);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+  pointer-events: none;
+}
+
+.memory-guide.is-on {
+  opacity: 0.78;
+  transform: translateY(0);
+}
+
+.memory-mode {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  color: rgba(71, 41, 24, 0.8);
+  font-family: var(--serif);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.memory-back,
+.memory-next {
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.memory-back {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 6px);
+  left: calc(env(safe-area-inset-left) + 8px);
+  min-height: 44px;
+  padding: 0 0.55rem;
+  font-size: clamp(0.82rem, 3.1vw, 0.9rem);
+  font-style: italic;
+  letter-spacing: 0.025em;
+  opacity: 0.78;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.8);
+}
+
+.memory-back::before {
+  content: "\2190";
+  display: inline-block;
+  margin-right: 0.38rem;
+  font-style: normal;
+}
+
+.memory-status {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  width: min(72vw, 17rem);
+  flex-direction: column;
+  align-items: center;
+  gap: 0.22rem;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.82);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: memory-copy-in 0.8s 0.65s var(--ease-soft) both;
+}
+
+.memory-year-label {
+  min-height: 1.05em;
+  font-size: clamp(0.82rem, 3vw, 0.88rem);
+  font-style: italic;
+  letter-spacing: 0.14em;
+}
+
+.memory-count {
+  font-size: clamp(0.72rem, 2.65vw, 0.76rem);
+  letter-spacing: 0.12em;
+  opacity: 0.78;
+}
+
+.memory-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 12px;
+}
+
+.memory-dots i {
+  width: 5px;
+  height: 5px;
+  border: 1px solid rgba(91, 57, 34, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 248, 224, 0.28);
+  box-shadow: 0 0 0 1px rgba(255, 248, 224, 0.2);
+  opacity: 0.72;
+  transition: background 0.45s ease, box-shadow 0.45s ease, transform 0.45s ease;
+}
+
+.memory-dots i.is-seen {
+  background: rgba(169, 111, 45, 0.58);
+}
+
+.memory-dots i.is-current {
+  background: rgba(138, 78, 33, 0.8);
+  box-shadow: 0 0 0 3px rgba(187, 132, 65, 0.18);
+  transform: scale(1.22);
+}
+
+.memory-actions {
+  position: absolute;
+  right: 0.85rem;
+  left: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.08rem;
+  text-align: center;
+  animation: memory-copy-in 0.8s 0.65s var(--ease-soft) both;
+}
+
+.memory-next {
+  position: relative;
+  min-height: 44px;
+  padding: 0 1.2rem;
+  font-size: clamp(0.9rem, 3.8vw, 1.04rem);
+  font-style: italic;
+  letter-spacing: 0.035em;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.82);
+}
+
+.memory-next[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.memory-next::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  bottom: 0.42rem;
+  left: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(137, 83, 40, 0.43), transparent);
+}
+
+.memory-swipe-hint {
+  margin-top: -0.22rem;
+  font-size: clamp(0.7rem, 2.45vw, 0.74rem);
+  font-style: italic;
+  letter-spacing: 0.035em;
+  opacity: 0.55;
+}
+
+.memory-back:focus-visible,
+.memory-next:focus-visible {
+  outline: 1px solid rgba(119, 69, 33, 0.48);
+  outline-offset: 2px;
+}
+
+.memory-back:active,
+.memory-next:active {
+  opacity: 0.55;
+}
+
+@keyframes memory-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+
+/* The centred status already owns its positioning transform. */
+.memory-status {
+  animation-name: memory-status-in;
+}
+
+@keyframes memory-status-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 3px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .threshold.is-lit .diya-flame {
+    animation: none;
+    transition: opacity 0.6s linear;
+  }
+  .diya.is-nudging .diya-ember {
+    animation: none;
+    opacity: 0.6;
+  }
+  .letter-paper,
+  .letter-wash.is-folding .letter-paper,
+  .letter-words,
+  .folded-note::after {
+    animation: none;
+  }
+  .memory-status,
+  .memory-actions {
+    animation: none;
+  }
+  .epilogue-layer::before,
+  .epilogue-video,
+  .epilogue-layer.is-playing .epilogue-video,
+  .epilogue-layer.is-leaving .epilogue-video {
+    transition-duration: 0.2s;
+    transition-delay: 0s;
+  }
+}

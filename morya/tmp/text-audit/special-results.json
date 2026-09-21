@@ -1,0 +1,127 @@
+{
+  "memory1": [],
+  "memory5": [],
+  "video": [
+    {
+      "sel": ".epilogue-controls button",
+      "text": "×",
+      "x": 5,
+      "y": 5,
+      "right": 49,
+      "bottom": 49,
+      "font": "18px",
+      "opacity": "0.62",
+      "visible": true
+    },
+    {
+      "sel": ".epilogue-controls button",
+      "text": "quiet",
+      "x": 341,
+      "y": 5,
+      "right": 385,
+      "bottom": 49,
+      "font": "12px",
+      "opacity": "0.62",
+      "visible": true
+    }
+  ],
+  "reducedStandalone": [
+    {
+      "sel": ".final-blessing p",
+      "text": "Ganpati Bappa Morya",
+      "x": 20,
+      "y": 781,
+      "right": 370,
+      "bottom": 805,
+      "font": "19.5px",
+      "opacity": "0.88",
+      "visible": true
+    },
+    {
+      "sel": ".final-blessing p",
+      "text": "Pudhchya varshi lavkar ya.",
+      "x": 20,
+      "y": 810,
+      "right": 370,
+      "bottom": 830,
+      "font": "15.99px",
+      "opacity": "0.9",
+      "visible": true
+    },
+    {
+      "sel": ".immersive",
+      "text": "",
+      "x": 294,
+      "y": 6,
+      "right": 338,
+      "bottom": 50,
+      "font": "16px",
+      "opacity": "0.1",
+      "visible": true
+    }
+  ],
+  "fullscreenSupported": true,
+  "fullscreenEntered": true,
+  "immersiveHint": [
+    {
+      "sel": ".immersive-hint-title",
+      "text": "For the most immersive view",
+      "x": 93,
+      "y": 66,
+      "right": 333,
+      "bottom": 84.21875,
+      "font": "13.5px",
+      "opacity": "1",
+      "visible": true
+    },
+    {
+      "sel": ".immersive-hint-step",
+      "text": "Share → Add to Home Screen",
+      "x": 93,
+      "y": 86.21875,
+      "right": 333,
+      "bottom": 103.09375,
+      "font": "12.5px",
+      "opacity": "0.88",
+      "visible": true
+    },
+    {
+      "sel": ".immersive-hint button",
+      "text": "×",
+      "x": 333,
+      "y": 53,
+      "right": 377,
+      "bottom": 97,
+      "font": "16px",
+      "opacity": "0.52",
+      "visible": true
+    }
+  ],
+  "navigatorStandalone": {
+    "immersiveHidden": true,
+    "final": [
+      {
+        "sel": ".final-blessing p",
+        "text": "Ganpati Bappa Morya",
+        "x": 20,
+        "y": 781,
+        "right": 370,
+        "bottom": 805,
+        "font": "19.5px",
+        "opacity": "0.88",
+        "visible": true
+      },
+      {
+        "sel": ".final-blessing p",
+        "text": "Pudhchya varshi lavkar ya.",
+        "x": 20,
+        "y": 810,
+        "right": 370,
+        "bottom": 830,
+        "font": "15.99px",
+        "opacity": "0.9",
+        "visible": true
+      }
+    ]
+  }
+}
